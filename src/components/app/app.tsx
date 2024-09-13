@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Layout, theme } from 'antd';
 
-import { SideMenu } from '../menu/menu';
+import { SideMenu } from '../menu/side-menu';
+import { SupportInfo } from "../support-info/support-info";
 
 const {Header, Content, Sider} = Layout;
 
-export const App: React.FC = () => {
+export const App: FC = () => {
   const {
     token: {colorBgContainer, borderRadiusLG},
   } = theme.useToken();
@@ -19,6 +20,7 @@ export const App: React.FC = () => {
         width="256px"
       >
         <SideMenu/>
+        <SupportInfo/>
       </Sider>
       <Layout>
         <Header style={{padding: 0, background: colorBgContainer}}/>

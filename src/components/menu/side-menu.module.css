@@ -20,19 +20,13 @@
 
 .menuItem {
   background-color: #333357;
-  color: #fff;
   text-align: start;
 }
 
-.menuItem:active {
-  background-color: #1677ff;
+.menuItem span {
+  color: #fff !important;
 }
 
 .subMenuItem {
   background-color: #001529;
-}
-
-.menuItemSelected {
-  background-color: #4CAF50;
-  color: #ffffff;
 }

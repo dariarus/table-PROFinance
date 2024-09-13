@@ -9,6 +9,6 @@ const app = ReactDOM.createRoot(
 );
 app.render(
   <React.StrictMode>
-  <App />
+    <App/>
   </React.StrictMode>
 );

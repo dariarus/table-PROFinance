@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Menu, Typography, type MenuProps } from 'antd';
 import { SettingOutlined, ContainerOutlined, FileTextOutlined, DatabaseOutlined } from '@ant-design/icons';
 
-import styles from './menu.module.css';
+import styles from './side-menu.module.css';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
