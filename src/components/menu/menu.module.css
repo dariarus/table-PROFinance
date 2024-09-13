@@ -1,0 +1,38 @@
+.menuHeaderWrap {
+  padding: 10px 10px 0 10px;
+  background-color: #001529;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  text-align: start;
+}
+
+.menuHeader {
+  margin: 0 !important;
+  color: #fff !important;
+}
+
+.menu {
+  width: 256px;
+  padding: 10px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.menuItem {
+  background-color: #333357;
+  color: #fff;
+  text-align: start;
+}
+
+.menuItem:active {
+  background-color: #1677ff;
+}
+
+.subMenuItem {
+  background-color: #001529;
+}
+
+.menuItemSelected {
+  background-color: #4CAF50;
+  color: #ffffff;
+}
