@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { Layout, theme } from 'antd';
+import { Button, Layout, theme } from 'antd';
+import {MessageOutlined} from '@ant-design/icons';
 
 import { SideMenu } from '../menu/side-menu';
 import { SupportInfo } from "../support-info/support-info";
@@ -21,6 +22,7 @@ export const App: FC = () => {
       >
         <SideMenu/>
         <SupportInfo/>
+        <Button type="primary" icon={<MessageOutlined />} block size="large" style={{padding: "30px", borderRadius: "20px"}}>Связаться нами</Button>
       </Sider>
       <Layout>
         <Header style={{padding: 0, background: colorBgContainer}}/>
