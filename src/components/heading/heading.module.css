@@ -1,0 +1,7 @@
+.headingWrap {
+  display: flex;
+}
+
+.heading {
+  margin: 0 !important;
+}
