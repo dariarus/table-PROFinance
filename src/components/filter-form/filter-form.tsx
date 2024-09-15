@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Button, Flex, Form, Input } from 'antd';
+import { ExportOutlined } from "@ant-design/icons";
 
 import styles from './filter-form.module.css';
 import { InputWrap } from "../input-wrap/input-wrap";
 import { DarkButton } from "../dark-button/dark-button";
-import { ExportOutlined } from "@ant-design/icons";
 
 export const FilterForm: FC = () => {
   return (

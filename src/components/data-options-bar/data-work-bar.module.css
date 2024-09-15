@@ -1,0 +1,15 @@
+.dividerTop {
+  margin: 24px 0 5px;
+}
+
+.dividerBottom {
+  margin: 5px 0 24px;
+}
+
+.button {
+  color: #001529;
+}
+
+.button:hover {
+  color: #333357 !important;
+}

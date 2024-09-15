@@ -7,6 +7,7 @@ import { SupportInfo } from "../support-info/support-info";
 import { Header } from "../header/header";
 import { FilterForm } from "../filter-form/filter-form";
 import { Heading } from "../heading/heading";
+import { DataOptionsBar } from "../data-options-bar/data-options-bar";
 
 const {Content, Sider} = Layout;
 
@@ -28,6 +29,7 @@ export const App: FC = () => {
         <Content style={{margin: '24px 0 0 16px'}}>
           <Heading/>
           <FilterForm/>
+          <DataOptionsBar/>
         </Content>
       </Layout>
     </Layout>
