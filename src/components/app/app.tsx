@@ -8,6 +8,7 @@ import { Header } from "../header/header";
 import { FilterForm } from "../filter-form/filter-form";
 import { Heading } from "../heading/heading";
 import { DataOptionsBar } from "../data-options-bar/data-options-bar";
+import { DataTable } from "../table/table";
 
 const {Content, Sider} = Layout;
 
@@ -18,11 +19,12 @@ export const App: FC = () => {
         theme="light"
         breakpoint="lg"
         width="256px"
+        style={{backgroundColor: "#f5f5f5"}}
       >
         <SideMenu/>
         <SupportInfo/>
         <Button type="primary" icon={<MessageOutlined/>} block size="large"
-                style={{padding: "30px", borderRadius: "20px"}}>Связаться нами</Button>
+                style={{padding: "30px", borderRadius: "20px"}}>Связаться c нами</Button>
       </Sider>
       <Layout>
         <Header/>
@@ -30,6 +32,7 @@ export const App: FC = () => {
           <Heading/>
           <FilterForm/>
           <DataOptionsBar/>
+          <DataTable/>
         </Content>
       </Layout>
     </Layout>
