@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import { Input, Table, type TableProps } from 'antd';
+import React, { FC, useState } from "react";
+import { Input, Table, type TableProps, Typography } from 'antd';
 
-type DataTable = {
+type Devices = {
   id: number;
   barcode: number;
   product_brand: string;
@@ -11,7 +11,9 @@ type DataTable = {
 }
 
 export const DataTable: FC = () => {
-  const dataSource: DataTable[] = [
+  const {Text} = Typography;
+
+  const dataSource: Devices[] = [
     {
       id: 1,
       barcode: 33380,
@@ -53,7 +55,57 @@ export const DataTable: FC = () => {
       price: 3032
     }]
 
-  const columns: TableProps<DataTable>['columns'] = [
+  const [data, setData] = useState(dataSource);
+  const [rowKey, setRowKey] = useState<number | null>(null); // Хранит ключ редактируемой строки
+  const [columnKey, setColumnKey] = useState<string>(''); // Хранит ключ редактируемой строки
+  const [editingCellValue, setEditingCellValue] = useState<Partial<Devices>>({}); // Хранит редактируемое значение
+//TODO: сделать useState и в useEffect подсчитывать новые количество и цену
+  // Определяет, редактируется ли строка
+  const isEditing = (record: Devices, key: string) => record.id === rowKey && key === columnKey;
+
+  // Функция для начала редактирования
+  const edit = (record: Devices, columnKey: string) => {
+    setRowKey(record.id);
+    setColumnKey(columnKey);
+    setEditingCellValue({...record}); // Записываем текущее значение в состояние
+  };
+
+  // Функция для сохранения изменений
+  const save = () => {
+    setData((previousData) =>
+      previousData.map((item) =>
+        item.id === rowKey ? {...item, ...editingCellValue} : item
+      )
+    );
+    setRowKey(null); // Очищаем ключ редактируемой строки
+  };
+
+  // Функция отмены редактирования
+  const cancel = () => {
+    setRowKey(null); // Сбрасываем состояние редактирования
+  };
+
+  const onCellEdit = (columnKey: keyof Devices) => (record: Devices) => ({
+      onDoubleClick: () => {
+        edit(record, columnKey); // Начать редактирование по двойному щелчку
+      },
+    });
+
+  const onCellRender = (columnKey: keyof Devices) => (value: number, record: Devices) =>
+      isEditing(record, columnKey) ? (
+        <Input
+          value={editingCellValue[columnKey]}
+          onChange={(e) =>
+            setEditingCellValue({...editingCellValue, [columnKey]: Number(e.target.value)})
+          }
+          onPressEnter={save}
+          onBlur={save} // Сохранение по выходу из поля ввода
+        />
+      ) : (
+        `${value}`
+      );
+
+  const columns: TableProps<Devices>['columns'] = [
     {
       title: 'Баркод',
       dataIndex: 'barcode',
@@ -77,15 +129,48 @@ export const DataTable: FC = () => {
       dataIndex: 'product_quantity',
       key: 'product quantity',
       sorter: (a, b) => a.product_quantity - b.product_quantity,
-      render: (number: number) => <Input value={number}/>
+      onCell: onCellEdit('product_quantity'),
+      render: onCellRender('product_quantity'),
     },
     {
       title: 'Цена',
       dataIndex: 'price',
       key: 'price',
       sorter: (a, b) => a.price - b.price,
+      onCell: onCellEdit('price'),
+      render: onCellRender('price'),
     },
   ];
 
-  return <Table columns={columns} dataSource={dataSource} pagination={false}/>;
+  const totalQuantity = data.reduce((acc, product) => acc + product.product_quantity, 0);
+  const totalPrice = data.reduce((acc, product) => acc + product.price, 0);
+
+  return (
+    <>
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        bordered
+        sticky
+        summary={() => {
+          return (
+            <Table.Summary fixed>
+              <Table.Summary.Row>
+                <Table.Summary.Cell index={0}>
+                  <Text>Итого:</Text>
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={1} colSpan={2}/>
+                <Table.Summary.Cell index={3}>
+                  <Text type="danger">{totalQuantity}</Text>
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={4}>
+                  <Text type="danger">{totalPrice}</Text>
+                </Table.Summary.Cell>
+              </Table.Summary.Row>
+            </Table.Summary>
+          )
+        }}/>
+    </>
+  );
 }
