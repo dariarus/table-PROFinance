@@ -1,7 +1,9 @@
-import React, { FC, useState } from "react";
+import React, { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import { Input, Table, type TableProps, Typography } from 'antd';
 
-type Devices = {
+import styles from './table.module.css';
+
+type Device = {
   id: number;
   barcode: number;
   product_brand: string;
@@ -13,7 +15,7 @@ type Devices = {
 export const DataTable: FC = () => {
   const {Text} = Typography;
 
-  const dataSource: Devices[] = [
+  const dataSource: Device[] = [
     {
       id: 1,
       barcode: 33380,
@@ -56,56 +58,71 @@ export const DataTable: FC = () => {
     }]
 
   const [data, setData] = useState(dataSource);
-  const [rowKey, setRowKey] = useState<number | null>(null); // Хранит ключ редактируемой строки
-  const [columnKey, setColumnKey] = useState<string>(''); // Хранит ключ редактируемой строки
-  const [editingCellValue, setEditingCellValue] = useState<Partial<Devices>>({}); // Хранит редактируемое значение
-//TODO: сделать useState и в useEffect подсчитывать новые количество и цену
-  // Определяет, редактируется ли строка
-  const isEditing = (record: Devices, key: string) => record.id === rowKey && key === columnKey;
+  const [rowKey, setRowKey] = useState<number | null>(null);
+  const [columnKey, setColumnKey] = useState<string>('');
+  const [editingCellValue, setEditingCellValue] = useState<Partial<Device>>({});
+  const [totalQuantity, setTotalQuantity] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
 
-  // Функция для начала редактирования
-  const edit = (record: Devices, columnKey: string) => {
+  const isEditing = (record: Device, key: string) => record.id === rowKey && key === columnKey;
+
+  const edit = (record: Device, columnKey: string) => {
     setRowKey(record.id);
     setColumnKey(columnKey);
-    setEditingCellValue({...record}); // Записываем текущее значение в состояние
+    setEditingCellValue({...record});
   };
 
-  // Функция для сохранения изменений
+  const isValidDevice = (device: Partial<Device>): boolean => {
+    return typeof device.product_quantity === 'number' && typeof device.price === 'number'
+  }
+
   const save = () => {
     setData((previousData) =>
       previousData.map((item) =>
-        item.id === rowKey ? {...item, ...editingCellValue} : item
+        item.id === rowKey && isValidDevice(editingCellValue) ? {...item, ...editingCellValue} : item
       )
     );
-    setRowKey(null); // Очищаем ключ редактируемой строки
+    setRowKey(null);
   };
 
-  // Функция отмены редактирования
   const cancel = () => {
-    setRowKey(null); // Сбрасываем состояние редактирования
+    setRowKey(null);
   };
 
-  const onCellEdit = (columnKey: keyof Devices) => (record: Devices) => ({
-      onDoubleClick: () => {
-        edit(record, columnKey); // Начать редактирование по двойному щелчку
-      },
-    });
+  const onCellEdit = (columnKey: keyof Device) => (record: Device) => ({
+    onDoubleClick: () => {
+      edit(record, columnKey);
+    },
+  });
 
-  const onCellRender = (columnKey: keyof Devices) => (value: number, record: Devices) =>
-      isEditing(record, columnKey) ? (
+  const onCellRender = (columnKey: keyof Device) => (value: number, record: Device) =>
+    isEditing(record, columnKey) ? (
+      <>
         <Input
           value={editingCellValue[columnKey]}
-          onChange={(e) =>
-            setEditingCellValue({...editingCellValue, [columnKey]: Number(e.target.value)})
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            const newValue = Number(e.target.value);
+            setEditingCellValue({
+              ...editingCellValue,
+              [columnKey]: Number.isNaN(newValue) ? e.target.value : newValue
+            })
+          }
           }
           onPressEnter={save}
-          onBlur={save} // Сохранение по выходу из поля ввода
+          onBlur={save}
+          status={typeof editingCellValue[columnKey] !== 'number' ? 'error' : undefined}
+          className={typeof editingCellValue[columnKey] !== 'number' ? `${styles.inputValueTextError}` : undefined}
         />
-      ) : (
-        `${value}`
-      );
+        {
+          typeof editingCellValue[columnKey] !== 'number'
+          && <Text className={styles.errorText}>Пожалуйста, введите число</Text>
+        }
+      </>
+    ) : (
+      `${value}`
+    );
 
-  const columns: TableProps<Devices>['columns'] = [
+  const columns: TableProps<Device>['columns'] = [
     {
       title: 'Баркод',
       dataIndex: 'barcode',
@@ -142,8 +159,23 @@ export const DataTable: FC = () => {
     },
   ];
 
-  const totalQuantity = data.reduce((acc, product) => acc + product.product_quantity, 0);
-  const totalPrice = data.reduce((acc, product) => acc + product.price, 0);
+  const handleEscCancel = useCallback((e: KeyboardEvent): void => {
+    if (e.key === 'Escape') {
+      cancel();
+    }
+  }, [])
+
+  useEffect(() => {
+    setTotalQuantity(data.reduce((acc, product) => acc + product.product_quantity, 0));
+    setTotalPrice(data.reduce((acc, product) => acc + product.price, 0));
+  }, [data]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscCancel)
+    return () => {
+      document.removeEventListener("keydown", handleEscCancel)
+    }
+  }, [])
 
   return (
     <>
