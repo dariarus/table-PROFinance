@@ -4,13 +4,17 @@ import { DownloadOutlined, FolderAddOutlined, CloseOutlined } from "@ant-design/
 
 import styles from './data-work-bar.module.css';
 
-export const DataOptionsBar: FC = () => {
+type Props = {
+  onClickLoad: () => void;
+}
+
+export const DataOptionsBar: FC<Props> = ({onClickLoad}) => {
   return (
     <>
       <Divider className={styles.dividerTop}/>
       <Flex justify="space-between" align="center">
         <Flex align="center" gap="small">
-          <Button type="link" icon={<DownloadOutlined/>} className={styles.button}>Загрузить данные из csv</Button>
+          <Button type="link" icon={<DownloadOutlined/>} className={styles.button} onClick={onClickLoad}>Загрузить данные из csv</Button>
           <Button type="link" icon={<FolderAddOutlined/>} className={styles.button}>Изменить данные</Button>
         </Flex>
         <Flex align="center" gap="small">

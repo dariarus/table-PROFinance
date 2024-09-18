@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Button, Layout } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 
@@ -8,11 +8,44 @@ import { Header } from "../header/header";
 import { FilterForm } from "../filter-form/filter-form";
 import { Heading } from "../heading/heading";
 import { DataOptionsBar } from "../data-options-bar/data-options-bar";
-import { DataTable } from "../table/table";
+import { DataTable } from "../data-table/data-table";
+import { Device } from '../../services/types';
+
+import devices from '../../vendor/DATA.json';
 
 const {Content, Sider} = Layout;
 
 export const App: FC = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<Device[]>([]);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<{ message: string }>({message: ''})
+
+  const loadLocal = (): Promise<void> => {
+    return Promise.resolve(devices)
+      .then((res) => {
+        setData(res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setIsError(true);
+        setError({message: err.message});
+        setIsLoading(false);
+      })
+  }
+
+  const onClickLoadData = useCallback(() => {
+    setIsLoading(true);
+    // Устанавливаю таймер для имитации загрузки ответа с сервера и отображения прелаудера
+    const fetchData = () => {
+      setTimeout(() => {
+        loadLocal();
+      }, 1000);
+    }
+    fetchData();
+  }, []);
+
   return (
     <Layout style={{}}>
       <Sider
@@ -31,8 +64,8 @@ export const App: FC = () => {
         <Content style={{margin: '24px 0 0 16px'}}>
           <Heading/>
           <FilterForm/>
-          <DataOptionsBar/>
-          <DataTable/>
+          <DataOptionsBar onClickLoad={onClickLoadData}/>
+          <DataTable dataSource={data} isLoading={isLoading} isError={isError} errorMessage={error.message}/>
         </Content>
       </Layout>
     </Layout>

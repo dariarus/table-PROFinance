@@ -1,69 +1,29 @@
 import React, { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
-import { Input, Table, type TableProps, Typography } from 'antd';
+import { Flex, Input, Table, type TableProps, Typography } from 'antd';
 
-import styles from './table.module.css';
+import styles from './data-table.module.css';
+import { Device } from "../../services/types";
 
-type Device = {
-  id: number;
-  barcode: number;
-  product_brand: string;
-  product_name: string;
-  product_quantity: number;
-  price: number;
+type Props = {
+  dataSource: Device[];
+  isLoading: boolean;
+  isError: boolean;
+  errorMessage: string;
 }
 
-export const DataTable: FC = () => {
-  const {Text} = Typography;
-
-  const dataSource: Device[] = [
-    {
-      id: 1,
-      barcode: 33380,
-      product_brand: "alcatel",
-      product_name: "alcatel Idol 4",
-      product_quantity: 20,
-      price: 222
-    },
-    {
-      id: 2,
-      barcode: 32288,
-      product_brand: "Samsung",
-      product_name: "Samsung Galaxy M30s",
-      product_quantity: 41,
-      price: 2513
-    },
-    {
-      id: 3,
-      barcode: 32718,
-      product_brand: "Asus",
-      product_name: "Asus Zenfone 5 Lite A502CG (2014)",
-      product_quantity: 26,
-      price: 2515
-    },
-    {
-      id: 4,
-      barcode: 33895,
-      product_brand: "LG",
-      product_name: "LG GS390 Prime",
-      product_quantity: 100,
-      price: 2443
-    },
-    {
-      id: 5,
-      barcode: 30355,
-      product_brand: "Motorola",
-      product_name: "Motorola RAZR2 V9x",
-      product_quantity: 62,
-      price: 3032
-    }]
-
-  const [data, setData] = useState(dataSource);
+export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessage}) => {
+  const [data, setData] = useState<Device[] | []>([]);
   const [rowKey, setRowKey] = useState<number | null>(null);
   const [columnKey, setColumnKey] = useState<string>('');
   const [editingCellValue, setEditingCellValue] = useState<Partial<Device>>({});
   const [totalQuantity, setTotalQuantity] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
+  const {Text} = Typography;
+
+  useEffect(() => {
+    setData(dataSource)
+  }, [dataSource])
   const isEditing = (record: Device, key: string) => record.id === rowKey && key === columnKey;
 
   const edit = (record: Device, columnKey: string) => {
@@ -179,30 +139,41 @@ export const DataTable: FC = () => {
 
   return (
     <>
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-        bordered
-        sticky
-        summary={() => {
-          return (
-            <Table.Summary fixed>
-              <Table.Summary.Row>
-                <Table.Summary.Cell index={0}>
-                  <Text>Итого:</Text>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={1} colSpan={2}/>
-                <Table.Summary.Cell index={3}>
-                  <Text type="danger">{totalQuantity}</Text>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell index={4}>
-                  <Text type="danger">{totalPrice}</Text>
-                </Table.Summary.Cell>
-              </Table.Summary.Row>
-            </Table.Summary>
-          )
-        }}/>
+      {
+        isError
+          ? <Flex justify="center" align="center">
+            <Text type="danger">{errorMessage}</Text>
+          </Flex>
+          : <Table
+            columns={columns}
+            dataSource={data}
+            pagination={false}
+            bordered
+            sticky
+            loading={isLoading}
+            rowKey="barcode"
+            summary={() => {
+              return (
+                <Table.Summary fixed>
+                  <Table.Summary.Row>
+                    <Table.Summary.Cell index={0}>
+                      <Text>Итого:</Text>
+                    </Table.Summary.Cell>
+                    <Table.Summary.Cell index={1}/>
+                    <Table.Summary.Cell index={2}>
+                      <Text>{data.length}</Text>
+                    </Table.Summary.Cell>
+                    <Table.Summary.Cell index={3}>
+                      <Text className={styles.summaryText}>{totalQuantity}</Text>
+                    </Table.Summary.Cell>
+                    <Table.Summary.Cell index={4}>
+                      <Text className={styles.summaryText}>{totalPrice}</Text>
+                    </Table.Summary.Cell>
+                  </Table.Summary.Row>
+                </Table.Summary>
+              )
+            }}/>
+      }
     </>
   );
 }
