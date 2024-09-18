@@ -6,6 +6,7 @@ import styles from './filter-form.module.css';
 import { InputWrap } from "../input-wrap/input-wrap";
 import { DarkButton } from "../dark-button/dark-button";
 import { Device } from "../../services/types";
+import { formatDate } from "../../services/utils/functions";
 
 type Props = {
   exportingData: Device[];
@@ -17,14 +18,15 @@ export const FilterForm: FC<Props> = ({exportingData}) => {
     const blob = new Blob([json], { type: 'application/json' });
     const href = URL.createObjectURL(blob);
 
-    // Создаем ссылку для скачивания
+    const timestamp = formatDate();
+    const filename = `DATA_${timestamp}.json`;
+
     const link = document.createElement('a');
     link.href = href;
-    link.download = 'newData.json'; // Имя файла
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
 
-    // Удаляем ссылку после скачивания
     document.body.removeChild(link);
   };
 
