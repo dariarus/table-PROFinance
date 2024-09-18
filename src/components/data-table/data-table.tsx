@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from "react";
 import { Flex, Input, Table, type TableProps, Typography } from 'antd';
 
 import styles from './data-table.module.css';
@@ -9,10 +9,10 @@ type Props = {
   isLoading: boolean;
   isError: boolean;
   errorMessage: string;
+  setGlobalData: Dispatch<SetStateAction<Device[]>>;
 }
 
-export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessage}) => {
-  const [data, setData] = useState<Device[] | []>([]);
+export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessage, setGlobalData}) => {
   const [rowKey, setRowKey] = useState<number | null>(null);
   const [columnKey, setColumnKey] = useState<string>('');
   const [editingCellValue, setEditingCellValue] = useState<Partial<Device>>({});
@@ -21,9 +21,6 @@ export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessa
 
   const {Text} = Typography;
 
-  useEffect(() => {
-    setData(dataSource)
-  }, [dataSource])
   const isEditing = (record: Device, key: string) => record.id === rowKey && key === columnKey;
 
   const edit = (record: Device, columnKey: string) => {
@@ -37,7 +34,7 @@ export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessa
   }
 
   const save = () => {
-    setData((previousData) =>
+    setGlobalData((previousData) =>
       previousData.map((item) =>
         item.id === rowKey && isValidDevice(editingCellValue) ? {...item, ...editingCellValue} : item
       )
@@ -126,9 +123,9 @@ export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessa
   }, [])
 
   useEffect(() => {
-    setTotalQuantity(data.reduce((acc, product) => acc + product.product_quantity, 0));
-    setTotalPrice(data.reduce((acc, product) => acc + product.price, 0));
-  }, [data]);
+    setTotalQuantity(dataSource.reduce((acc, product) => acc + product.product_quantity, 0));
+    setTotalPrice(dataSource.reduce((acc, product) => acc + product.price, 0));
+  }, [dataSource]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleEscCancel)
@@ -146,7 +143,7 @@ export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessa
           </Flex>
           : <Table
             columns={columns}
-            dataSource={data}
+            dataSource={dataSource}
             pagination={false}
             bordered
             sticky
@@ -161,7 +158,7 @@ export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessa
                     </Table.Summary.Cell>
                     <Table.Summary.Cell index={1}/>
                     <Table.Summary.Cell index={2}>
-                      <Text>{data.length}</Text>
+                      <Text>{dataSource.length}</Text>
                     </Table.Summary.Cell>
                     <Table.Summary.Cell index={3}>
                       <Text className={styles.summaryText}>{totalQuantity}</Text>

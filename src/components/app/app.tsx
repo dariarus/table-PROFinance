@@ -13,18 +13,18 @@ import { Device } from '../../services/types';
 
 import devices from '../../vendor/DATA.json';
 
-const {Content, Sider} = Layout;
-
 export const App: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [data, setData] = useState<Device[]>([]);
+  const [globalData, setGlobalData] = useState<Device[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<{ message: string }>({message: ''})
+
+  const {Content, Sider} = Layout;
 
   const loadLocal = (): Promise<void> => {
     return Promise.resolve(devices)
       .then((res) => {
-        setData(res);
+        setGlobalData(res);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -63,9 +63,10 @@ export const App: FC = () => {
         <Header/>
         <Content style={{margin: '24px 0 0 16px'}}>
           <Heading/>
-          <FilterForm/>
+          <FilterForm exportingData={globalData}/>
           <DataOptionsBar onClickLoad={onClickLoadData}/>
-          <DataTable dataSource={data} isLoading={isLoading} isError={isError} errorMessage={error.message}/>
+          <DataTable dataSource={globalData} isLoading={isLoading} isError={isError} errorMessage={error.message}
+                     setGlobalData={setGlobalData}/>
         </Content>
       </Layout>
     </Layout>
