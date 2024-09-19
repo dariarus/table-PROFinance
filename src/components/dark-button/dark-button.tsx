@@ -6,7 +6,7 @@ import styles from "./dark-button.module.css";
 type DarkButton = {
   icon: ReactElement;
   name: string;
-  onExportClick: () => void;
+  onExportClick?: () => void;
 }
 
 export const DarkButton: FC<DarkButton> = ({icon, name, onExportClick}) => {

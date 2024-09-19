@@ -35,7 +35,7 @@ export const App: FC = () => {
       })
   }
 
-  const onClickLoadData = useCallback(() => {
+  const onClickLoadData = useCallback((): void => {
     setIsLoading(true);
     // Устанавливаю таймер для имитации загрузки ответа с сервера и отображения прелаудера
     const fetchData = () => {

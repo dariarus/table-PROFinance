@@ -21,9 +21,9 @@ export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessa
 
   const {Text} = Typography;
 
-  const isEditing = (record: Device, key: string) => record.id === rowKey && key === columnKey;
+  const isEditing = (record: Device, key: string): boolean => record.id === rowKey && key === columnKey;
 
-  const edit = (record: Device, columnKey: string) => {
+  const edit = (record: Device, columnKey: string): void => {
     setRowKey(record.id);
     setColumnKey(columnKey);
     setEditingCellValue({...record});
@@ -33,7 +33,7 @@ export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessa
     return typeof device.product_quantity === 'number' && typeof device.price === 'number'
   }
 
-  const save = () => {
+  const save = (): void => {
     setGlobalData((previousData) =>
       previousData.map((item) =>
         item.id === rowKey && isValidDevice(editingCellValue) ? {...item, ...editingCellValue} : item
@@ -42,7 +42,7 @@ export const DataTable: FC<Props> = ({dataSource, isLoading, isError, errorMessa
     setRowKey(null);
   };
 
-  const cancel = () => {
+  const cancel = (): void => {
     setRowKey(null);
   };
 
