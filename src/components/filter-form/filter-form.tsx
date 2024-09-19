@@ -14,7 +14,7 @@ type Props = {
 }
 
 type FilterOptions = {
-  barcode: number | null;
+  barcode: number | string | null;
   productBrand: string;
   productName: string;
 }
@@ -118,10 +118,13 @@ export const FilterForm: FC<Props> = ({data, setFilteredData}) => {
         <InputWrap>
           <Form.Item<FilterOptions> label="Баркод" className={styles.formItem}>
             <Input value={filterOptions.barcode?.toString()}
-                   onChange={(e: ChangeEvent<HTMLInputElement>) => setFilterOptions({
-                     ...filterOptions,
-                     barcode: e.target.value === '' ? null : Number(e.target.value)
-                   })}/>
+                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                     const newValue = Number(e.target.value);
+                     setFilterOptions({
+                       ...filterOptions,
+                       barcode: Number.isNaN(newValue) ? e.target.value : newValue
+                     })
+                   }}/>
           </Form.Item>
         </InputWrap>
         <InputWrap>
