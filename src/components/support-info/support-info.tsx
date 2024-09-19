@@ -22,13 +22,13 @@ export const SupportInfo: FC = () => {
       <Paragraph className={`${styles.text} ${styles.textSecondary}`}>Часы работы:</Paragraph>
       <Paragraph className={styles.text}>Пн-Пт с 9:00 до 19:00 Мск</Paragraph>
       <div className={styles.lawInfoWrap}>
-        <Link href="/example.com" className={`${styles.text} ${styles.textSecondary} ${styles.link}`}>Пользовательское соглашение</Link>
+        <Link href="https://www.example.com" className={`${styles.text} ${styles.textSecondary} ${styles.link}`}>Пользовательское соглашение</Link>
         <span className={styles.span}></span>
-        <Link href="/example.com" className={`${styles.text} ${styles.textSecondary} ${styles.link}`}>Политика конфиденциальности</Link>
+        <Link href="https://www.example.com" className={`${styles.text} ${styles.textSecondary} ${styles.link}`}>Политика конфиденциальности</Link>
         <span className={styles.span}></span>
-        <Link href="/example.com" className={`${styles.text} ${styles.textSecondary} ${styles.link}`}>Юридическая информация</Link>
+        <Link href="https://www.example.com" className={`${styles.text} ${styles.textSecondary} ${styles.link}`}>Юридическая информация</Link>
         <span className={styles.span}></span>
-        <Link href="/example.com" className={`${styles.text} ${styles.textSecondary} ${styles.link}`}>Публичная оферта</Link>
+        <Link href="https://www.example.com" className={`${styles.text} ${styles.textSecondary} ${styles.link}`}>Публичная оферта</Link>
       </div>
     </div>
   )

@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-left: 16px;
+  padding: 10px 10px 10px 20px;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.userWrap {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.userNameWrap {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.text {
+  margin: 0 !important;
+}
+
+.buttonsWrap {
+  display: flex;
+  gap: 5px;
+}
+
+.filledButton {
+  background-color: #EF4915;
+  border-color: #EF4915;
+}
+
+.filledButton:hover {
+  background-color: #F37047 !important;
+  border-color: #F37047;
+}
