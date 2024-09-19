@@ -63,7 +63,7 @@ export const App: FC = () => {
         <Header/>
         <Content style={{margin: '24px 0 0 16px'}}>
           <Heading/>
-          <FilterForm exportingData={globalData}/>
+          <FilterForm data={globalData} setFilteredData={setGlobalData}/>
           <DataOptionsBar onClickLoad={onClickLoadData}/>
           <DataTable dataSource={globalData} isLoading={isLoading} isError={isError} errorMessage={error.message}
                      setGlobalData={setGlobalData}/>

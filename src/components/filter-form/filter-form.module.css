@@ -5,3 +5,7 @@
 .formItem {
   margin: 0;
 }
+
+.inputSelect {
+  min-width: 200px;
+}
