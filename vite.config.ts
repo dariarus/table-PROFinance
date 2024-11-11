@@ -7,5 +7,5 @@ export default defineConfig({
       tsDecorators: true
     }),
   ],
-  base: "/Table_PROFinance/",
+  base: "/table-PROFinance/",
 })

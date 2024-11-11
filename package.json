@@ -2,7 +2,7 @@
   "name": "table",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://dariarus.github.io/Table_PROFinance/",
+  "homepage": "https://dariarus.github.io/table-PROFinance/",
   "type": "module",
   "scripts": {
     "dev": "vite",
