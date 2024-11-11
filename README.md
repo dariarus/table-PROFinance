@@ -30,13 +30,13 @@ _Инструкция по запуску приложения_:
 1). Клонировать репозиторий :
 
 ```
-git clone git@github.com:dariarus/Table_PROFinance.git
+git clone git@github.com:dariarus/table-PROFinance.git
 ```
 
 2). Перейти в папку с проектом:
 
 ```shell
-cd table_pro-finance
+cd table-pro-finance
 ```
 
 3). Запустить приложение в режиме разработки:
